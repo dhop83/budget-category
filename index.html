@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Category Master</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        .screen {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .active {
+            display: block;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #3498db;
+        }
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .expense-item {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .expense-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a085;
+        }
+        .category-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .category-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .category-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .housing {
+            background-color: #3498db;
+            color: white;
+        }
+        .transportation {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .food {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .utilities {
+            background-color: #f39c12;
+            color: white;
+        }
+        .entertainment {
+            background-color: #9b59b6;
+            color: white;
+        }
+        .health {
+            background-color: #1abc9c;
+            color: white;
+        }
+        .debt {
+            background-color: #e67e22;
+            color: white;
+        }
+        .savings {
+            background-color: #34495e;
+            color: white;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            transition: width 0.5s;
+        }
+        .score-summary {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .result-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .correct {
+            background-color: #d5f5e3;
+            border-left: 5px solid #2ecc71;
+        }
+        .incorrect {
+            background-color: #fadbd8;
+            border-left: 5px solid #e74c3c;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #ffd700;
+            animation: confetti-fall 3s ease-in-out forwards;
+            z-index: 999;
+        }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        .perfect-score {
+            animation: pulse 1s infinite;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .category-help {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .help-toggle {
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .category-description {
+            margin-top: 10px;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        .tips-box {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Budget Category Master</h1>
+    
+    <!-- Start Screen -->
+    <div id="screen-start" class="screen active">
+        <h2>Learn to Master Budget Categories!</h2>
+        <p>Test your knowledge about categorizing expenses properly in a budget.</p>
+        <button id="start-button" class="button">Start Game</button>
+        <button id="how-to-play" class="button">How to Play</button>
+        
+        <div class="tips-box">
+            <h3>Why Budget Categories Matter</h3>
+            <p>Organizing expenses into categories helps you:</p>
+            <ul style="text-align: left;">
+                <li>Identify spending patterns</li>
+                <li>Find areas to cut back</li>
+                <li>Make informed financial decisions</li>
+                <li>Plan for future expenses</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- How to Play Screen -->
+    <div id="screen-how-to-play" class="screen">
+        <h2>How to Play</h2>
+        <p>You'll be shown different expenses one at a time.</p>
+        <p>For each expense, decide which budget category it belongs in:</p>
+        
+        <div class="category-help">
+            <div><span class="category-button housing">Housing</span> <span class="category-description">Rent, mortgage, property taxes, repairs, etc.</span></div>
+            <div><span class="category-button transportation">Transportation</span> <span class="category-description">Car payments, gas, public transit, maintenance, etc.</span></div>
+            <div><span class="category-button food">Food</span> <span class="category-description">Groceries, dining out, coffee shops, etc.</span></div>
+            <div><span class="category-button utilities">Utilities</span> <span class="category-description">Electricity, water, internet, phone, etc.</span></div>
+            <div><span class="category-button entertainment">Entertainment</span> <span class="category-description">Streaming services, movies, hobbies, etc.</span></div>
+            <div><span class="category-button health">Health</span> <span class="category-description">Insurance, medications, doctor visits, etc.</span></div>
+            <div><span class="category-button debt">Debt Payment</span> <span class="category-description">Credit cards, student loans, personal loans, etc.</span></div>
+            <div><span class="category-button savings">Savings</span> <span class="category-description">Emergency fund, retirement, big purchases, etc.</span></div>
+        </div>
+        
+        <p>After categorizing all expenses, you'll see your score and explanations!</p>
+        <button id="back-to-start" class="button">Back to Start</button>
+    </div>
+    
+    <!-- Game Screen -->
+    <div id="screen-game" class="screen">
+        <div class="progress-bar">
+            <div id="progress" class="progress" style="width: 0%;"></div>
+        </div>
+        
+        <h2>Categorize This Expense:</h2>
+        <div class="expense-item">
+            <div id="expense-description">Monthly Netflix subscription</div>
+            <div class="expense-amount">$<span id="expense-amount">14.99</span></div>
+        </div>
+        
+        <div class="category-options">
+            <button class="category-button housing" data-category="housing">Housing</button>
+            <button class="category-button transportation" data-category="transportation">Transportation</button>
+            <button class="category-button food" data-category="food">Food</button>
+            <button class="category-button utilities" data-category="utilities">Utilities</button>
+            <button class="category-button entertainment" data-category="entertainment">Entertainment</button>
+            <button class="category-button health" data-category="health">Health</button>
+            <button class="category-button debt" data-category="debt">Debt Payment</button>
+            <button class="category-button savings" data-category="savings">Savings</button>
+        </div>
+        
+        <div class="help-toggle" id="show-help">Need help with categories?</div>
+        <div id="category-help" class="category-help" style="display: none;">
+            <div><span class="category-button housing">Housing</span> <span class="category-description">Rent, mortgage, property taxes, repairs, etc.</span></div>
+            <div><span class="category-button transportation">Transportation</span> <span class="category-description">Car payments, gas, public transit, maintenance, etc.</span></div>
+            <div><span class="category-button food">Food</span> <span class="category-description">Groceries, dining out, coffee shops, etc.</span></div>
+            <div><span class="category-button utilities">Utilities</span> <span class="category-description">Electricity, water, internet, phone, etc.</span></div>
+            <div><span class="category-button entertainment">Entertainment</span> <span class="category-description">Streaming services, movies, hobbies, etc.</span></div>
+            <div><span class="category-button health">Health</span> <span class="category-description">Insurance, medications, doctor visits, etc.</span></div>
+            <div><span class="category-button debt">Debt Payment</span> <span class="category-description">Credit cards, student loans, personal loans, etc.</span></div>
+            <div><span class="category-button savings">Savings</span> <span class="category-description">Emergency fund, retirement, big purchases, etc.</span></div>
+        </div>
+    </div>
+    
+    <!-- Results Screen -->
+    <div id="screen-results" class="screen">
+        <h2>Your Results</h2>
+        <div class="score-summary">
+            <p>You scored: <span id="final-score">0</span>/<span id="total-questions">15</span></p>
+            <p id="score-message">Great job!</p>
+        </div>
+        
+        <div class="tips-box">
+            <h3>Budgeting Tips</h3>
+            <ul style="text-align: left;">
+                <li>Use the 50/30/20 rule: 50% for needs, 30% for wants, 20% for savings</li>
+                <li>Review your budget categories monthly to catch areas of overspending</li>
+                <li>Make sure to include irregular expenses in your budget (car repairs, medical, etc.)</li>
+                <li>Consider using budgeting apps that can help categorize expenses automatically</li>
+            </ul>
+        </div>
+        
+        <div id="results-details"></div>
+        <button id="play-again" class="button">Play Again</button>
+    </div>
+
+    <script>
+        // All possible expense items with descriptions, amounts, categories, and explanations
+        const allExpenseItems = [
+            {
+                description: "Monthly rent payment",
+                amount: "1200.00",
+                category: "housing",
+                explanation: "Rent is a housing expense as it's the payment for your living space."
+            },
+            {
+                description: "Grocery shopping at Whole Foods",
+                amount: "85.73",
+                category: "food",
+                explanation: "Groceries are categorized as food expenses since they provide your daily nutrition."
+            },
+            {
+                description: "Car insurance payment",
+                amount: "110.50",
+                category: "transportation",
+                explanation: "Car insurance is a transportation expense as it's directly related to your vehicle costs."
+            },
+            {
+                description: "Electric bill",
+                amount: "93.45",
+                category: "utilities",
+                explanation: "Electricity is a utility expense as it's a basic service for your home."
+            },
+            {
+                description: "Movie theater tickets",
+                amount: "28.50",
+                category: "entertainment",
+                explanation: "Movie tickets are entertainment expenses since they're non-essential recreational activities."
+            },
+            {
+                description: "Monthly Netflix subscription",
+                amount: "14.99",
+                category: "entertainment",
+                explanation: "Streaming services are entertainment expenses as they provide optional leisure content."
+            },
+            {
+                description: "Prescription medication",
+                amount: "45.00",
+                category: "health",
+                explanation: "Medications are health expenses as they relate to your medical well-being."
+            },
+            {
+                description: "Credit card minimum payment",
+                amount: "35.00",
+                category: "debt",
+                explanation: "Credit card payments are debt expenses as they're paying down borrowed money."
+            },
+            {
+                description: "Deposit to emergency fund",
+                amount: "100.00",
+                category: "savings",
+                explanation: "Emergency fund contributions are savings because you're setting aside money for future needs."
+            },
+            {
+                description: "Internet service provider bill",
+                amount: "65.99",
+                category: "utilities",
+                explanation: "Internet service is a utility expense as it's a basic home service in today's world."
+            },
+            {
+                description: "Gas station fill-up",
+                amount: "48.32",
+                category: "transportation",
+                explanation: "Gasoline is a transportation expense as it's directly related to operating your vehicle."
+            },
+            {
+                description: "Restaurant dinner with friends",
+                amount: "56.40",
+                category: "food",
+                explanation: "Dining out is a food expense, though some people might separate restaurant meals from groceries."
+            },
+            {
+                description: "Gym membership fee",
+                amount: "29.99",
+                category: "health",
+                explanation: "Gym memberships are health expenses as they contribute to your physical well-being."
+            },
+            {
+                description: "Smartphone monthly payment plan",
+                amount: "45.00",
+                category: "utilities",
+                explanation: "Phone bills are utility expenses as they provide essential communication services."
+            },
+            {
+                description: "Home repair (fixing a leaky faucet)",
+                amount: "125.00",
+                category: "housing",
+                explanation: "Home repairs are housing expenses as they maintain your living space."
+            },
+            {
+                description: "Concert tickets",
+                amount: "87.50",
+                category: "entertainment",
+                explanation: "Concert tickets are entertainment expenses as they're non-essential recreational activities."
+            },
+            {
+                description: "Annual car registration fee",
+                amount: "120.00",
+                category: "transportation",
+                explanation: "Vehicle registration is a transportation expense as it's required for legal vehicle operation."
+            },
+            {
+                description: "Student loan payment",
+                amount: "220.00",
+                category: "debt",
+                explanation: "Student loans are debt payments as you're paying back money borrowed for education."
+            },
+            {
+                description: "401(k) retirement contribution",
+                amount: "150.00",
+                category: "savings",
+                explanation: "Retirement contributions are savings expenses as you're setting aside money for future needs."
+            },
+            {
+                description: "Dental cleaning",
+                amount: "75.00",
+                category: "health",
+                explanation: "Dental care is a health expense as it relates to your medical well-being."
+            },
+            {
+                description: "Water and sewer bill",
+                amount: "45.30",
+                category: "utilities",
+                explanation: "Water service is a utility expense as it's a basic necessity service for your home."
+            },
+            {
+                description: "New shoes for work",
+                amount: "85.00",
+                category: "housing",
+                explanation: "Work clothes are housing expenses in budgeting as they're basic necessities for daily life."
+            },
+            {
+                description: "Coffee shop visit",
+                amount: "5.75",
+                category: "food",
+                explanation: "Coffee and snacks from cafes are food expenses, though some might categorize frequent coffee shop visits as entertainment."
+            },
+            {
+                description: "Uber ride to airport",
+                amount: "32.50",
+                category: "transportation",
+                explanation: "Rideshare services are transportation expenses as they're getting you from one place to another."
+            },
+            {
+                description: "Mobile game in-app purchase",
+                amount: "4.99",
+                category: "entertainment",
+                explanation: "Gaming purchases are entertainment expenses as they provide optional leisure activities."
+            }
+        ];
+
+        // Game state variables
+        let gameItems = [];
+        let currentItemIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        // Helper function to select an element
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+        // Helper function to show a screen and hide others
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            $(screenId).classList.add('active');
+        }
+
+        // Function to shuffle array using Fisher-Yates algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Select random items for each game
+        function selectRandomItems(count = 15) {
+            const shuffled = shuffleArray([...allExpenseItems]);
+            return shuffled.slice(0, count);
+        }
+
+        // Show the next item in the game
+        function showNextItem() {
+            if (currentItemIndex >= gameItems.length) {
+                endGame();
+                return;
+            }
+
+            const item = gameItems[currentItemIndex];
+            $("expense-description").textContent = item.description;
+            $("expense-amount").textContent = item.amount;
+            
+            // Update progress bar
+            const progressPercent = (currentItemIndex / gameItems.length) * 100;
+            $("progress").style.width = progressPercent + "%";
+        }
+
+        // Handle user's answer
+        function handleAnswer(selectedCategory) {
+            const currentItem = gameItems[currentItemIndex];
+            const isCorrect = selectedCategory === currentItem.category;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            userAnswers.push({
+                description: currentItem.description,
+                amount: currentItem.amount,
+                userCategory: selectedCategory,
+                correctCategory: currentItem.category,
+                isCorrect: isCorrect,
+                explanation: currentItem.explanation
+            });
+            
+            currentItemIndex++;
+            showNextItem();
+        }
+
+        // Create confetti for perfect score celebration
+        function createConfetti() {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            
+            // Random position, color, and size
+            const left = Math.random() * 100;
+            confetti.style.left = `${left}%`;
+            
+            const colors = ["#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6", "#1abc9c"];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.backgroundColor = randomColor;
+            
+            const size = Math.random() * 8 + 5; // 5-13px
+            confetti.style.width = `${size}px`;
+            confetti.style.height = `${size}px`;
+            
+            // Random rotation
+            const rotationSpeed = Math.random() * 600 + 400; // 400-1000
+            confetti.style.animation = `confetti-fall ${rotationSpeed / 100}s ease-in-out forwards`;
+            
+            document.body.appendChild(confetti);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                confetti.remove();
+            }, (rotationSpeed / 100) * 1000);
+        }
+        
+        // Play celebration sound
+        function playSuccessSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create oscillator for "ta-da" sound
+                const playNote = (frequency, start, duration, volume) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = frequency;
+                    
+                    gainNode.gain.setValueAtTime(0, start);
+                    gainNode.gain.linearRampToValueAtTime(volume, start + 0.05);
+                    gainNode.gain.setValueAtTime(volume, start + duration - 0.05);
+                    gainNode.gain.linearRampToValueAtTime(0, start + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start(start);
+                    oscillator.stop(start + duration);
+                };
+                
+                const now = audioContext.currentTime;
+                // Play a sequence of notes for celebration
+                playNote(587.33, now, 0.2, 0.5);      // D5
+                playNote(783.99, now + 0.2, 0.3, 0.6); // G5
+                playNote(1046.50, now + 0.5, 0.5, 0.7); // C6
+            } catch (error) {
+                console.log("Audio playback not supported");
+            }
+        }
+        
+        // Celebrate perfect score with confetti and sound
+        function celebratePerfectScore() {
+            // Play sound immediately when showing results
+            playSuccessSound();
+            
+            // Launch all confetti pieces at once for immediate visual impact
+            for (let i = 0; i < 200; i++) {
+                // Small stagger (50ms max) to prevent browser lag but still look simultaneous
+                setTimeout(() => {
+                    createConfetti();
+                }, Math.random() * 50);
+            }
+        }
+
+        // End the game and show results
+        function endGame() {
+            showScreen("screen-results");
+            $("final-score").textContent = score;
+            $("total-questions").textContent = gameItems.length;
+            
+            // Determine message based on score
+            const scoreMessage = $("score-message");
+            if (score === gameItems.length) {
+                scoreMessage.textContent = "PERFECT SCORE! You're a budgeting master!";
+                scoreMessage.classList.add("perfect-score");
+                celebratePerfectScore();
+            } else if (score >= Math.floor(gameItems.length * 0.9)) {
+                scoreMessage.textContent = "Outstanding! You have excellent budgeting knowledge!";
+            } else if (score >= Math.floor(gameItems.length * 0.7)) {
+                scoreMessage.textContent = "Great job! You have a solid understanding of budget categories!";
+            } else if (score >= Math.floor(gameItems.length * 0.5)) {
+                scoreMessage.textContent = "Good effort! You're on the right track with your budgeting skills.";
+            } else {
+                scoreMessage.textContent = "Keep learning! Proper categorization takes practice.";
+            }
+            
+            // Display detailed results
+            const resultsDetails = $("results-details");
+            resultsDetails.innerHTML = "";
+            
+            userAnswers.forEach((result, index) => {
+                const resultBox = document.createElement("div");
+                resultBox.className = `result-box ${result.isCorrect ? "correct" : "incorrect"}`;
+                
+                const categoryNameMap = {
+                    "housing": "Housing",
+                    "transportation": "Transportation",
+                    "food": "Food",
+                    "utilities": "Utilities",
+                    "entertainment": "Entertainment",
+                    "health": "Health",
+                    "debt": "Debt Payment",
+                    "savings": "Savings"
+                };
+                
+                resultBox.innerHTML = `
+                    <p><strong>${index + 1}. $${result.amount} - ${result.description}</strong></p>
+                    <p>Your answer: ${categoryNameMap[result.userCategory]}</p>
+                    ${!result.isCorrect ? `<p>Correct answer: ${categoryNameMap[result.correctCategory]}</p>` : ""}
+                    <div class="explanation">
+                        <p>${result.explanation}</p>
+                    </div>
+                `;
+                
+                resultsDetails.appendChild(resultBox);
+            });
+        }
+
+        // Reset the game
+        function resetGame() {
+            currentItemIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            // Reset any celebration styling
+            if ($("score-message").classList.contains("perfect-score")) {
+                $("score-message").classList.remove("perfect-score");
+            }
+            
+            // Get a new set of randomized items
+            gameItems = selectRandomItems(15);
+            
+            showScreen("screen-start");
+        }
+
+        // Event listeners
+        $("start-button").addEventListener("click", () => {
+            // Get random items for this game session
+            gameItems = selectRandomItems(15);
+            showScreen("screen-game");
+            showNextItem();
+        });
+        
+        $("how-to-play").addEventListener("click", () => {
+            showScreen("screen-how-to-play");
+        });
+        
+        $("back-to-start").addEventListener("click", () => {
+            showScreen("screen-start");
+        });
+        
+        $("show-help").addEventListener("click", () => {
+            const helpBox = $("category-help");
+            if (helpBox.style.display === "none") {
+                helpBox.style.display = "block";
+                $("show-help").textContent = "Hide category help";
+            } else {
+                helpBox.style.display = "none";
+                $("show-help").textContent = "Need help with categories?";
+            }
+        });
+        
+        // Add event listeners to all category buttons
+        document.querySelectorAll('.category-button').forEach(button => {
+            button.addEventListener('click', () => {
+                handleAnswer(button.dataset.category);
+            });
+        });
+        
+        $("play-again").addEventListener("click", resetGame);
+    </script>
+</body>
+</html>
