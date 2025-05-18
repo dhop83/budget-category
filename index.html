@@ -33,6 +33,102 @@
             padding: 35px;
             margin-bottom: 30px;
         }
+        .instructions {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .highlight {
+            color: #3498db;
+            font-weight: bold;
+        }
+        .quiz-container {
+            margin-top: 30px;
+        }
+        .quiz-item {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        .quiz-question {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .option-btn {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .option-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        .option-btn.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        .progress-container {
+            margin: 30px 0;
+            position: relative;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+        }
+        .play-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .play-button:hover {
+            background-color: #2980b9;
+        }
         .results-header {
             text-align: center;
             color: #3498db;
@@ -65,40 +161,6 @@
             max-width: 400px;
             margin: 0 auto 30px;
         }
-        .quiz-item {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px 25px;
-            margin-bottom: 20px;
-        }
-        .quiz-question {
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .quiz-answer {
-            margin: 8px 0;
-        }
-        .user-answer {
-            color: #e74c3c;
-            font-weight: normal;
-        }
-        .correct-answer {
-            color: #2ecc71;
-            font-weight: bold;
-        }
-        .explanation {
-            font-size: 14px;
-            color: #555;
-            margin-top: 5px;
-            font-style: italic;
-        }
-        .tips-container {
-            background-color: #EBF5FB;
-            border-radius: 8px;
-            padding: 25px;
-        }
         .tips-header {
             font-size: 22px;
             margin-bottom: 20px;
@@ -120,31 +182,44 @@
             color: #3498db;
             font-weight: bold;
         }
-        .play-button {
-            display: block;
-            width: 200px;
-            margin: 30px auto;
-            background-color: #3498db;
-            color: white;
-            text-align: center;
-            padding: 12px 0;
-            font-size: 18px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            border: none;
-            cursor: pointer;
+        .budget-info {
+            background-color: #EBF5FB;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
         }
-        .play-button:hover {
-            background-color: #2980b9;
+        .budget-info h3 {
+            color: #2980b9;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
         }
-        .highlight {
-            color: #3498db;
-            font-weight: bold;
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .category {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .category.housing { border-left: 4px solid #3498db; }
+        .category.transportation { border-left: 4px solid #2ecc71; }
+        .category.food { border-left: 4px solid #e74c3c; }
+        .category.utilities { border-left: 4px solid #f39c12; }
+        .category.entertainment { border-left: 4px solid #9b59b6; }
+        .category.debt { border-left: 4px solid #e67e22; }
+        .category.health { border-left: 4px solid #1abc9c; }
+        .category.savings { border-left: 4px solid #34495e; }
+        .hidden {
+            display: none;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -153,130 +228,318 @@
         </div>
         
         <div class="card">
-            <h2 class="results-header">Your Results</h2>
-            
-            <div class="score">You scored: <span>4/6</span></div>
-            <div class="encouragement">Keep learning! Proper categorization is key to budget success.</div>
-            
-            <h3 class="section-title">Your Budget Breakdown</h3>
-            
-            <div class="chart-container">
-                <canvas id="budgetChart"></canvas>
+            <div class="instructions">
+                Test your knowledge of <span class="highlight">budget categories</span>! For each expense shown, select the correct budget category. See if you can become a Budget Category Master!
             </div>
             
-            <h3 class="section-title">Quiz Results</h3>
-            
-            <div class="quiz-item">
-                <div class="quiz-question">Monthly rent payment</div>
-                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">housing</span></div>
-                <div class="explanation">Rent is a housing expense as it's the payment for your living space.</div>
+            <div class="budget-info">
+                <h3>Common Budget Categories</h3>
+                <div class="category-list">
+                    <div class="category housing">Housing</div>
+                    <div class="category transportation">Transportation</div>
+                    <div class="category food">Food</div>
+                    <div class="category utilities">Utilities</div>
+                    <div class="category entertainment">Entertainment</div>
+                    <div class="category debt">Debt</div>
+                    <div class="category health">Health</div>
+                    <div class="category savings">Savings</div>
+                </div>
+                <p>Properly categorizing your expenses is the first step toward effective budgeting. Use these standard categories to organize your spending!</p>
             </div>
             
-            <div class="quiz-item">
-                <div class="quiz-question">Car insurance payment</div>
-                <div class="quiz-answer">You chose: <span class="user-answer transportation">transportation</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">transportation</span></div>
-                <div class="explanation">Insurance is a transportation expense because it's tied to your vehicle.</div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text"><span id="currentQuestion">1</span> of <span id="totalQuestions">6</span> questions</div>
             </div>
             
-            <div class="quiz-item">
-                <div class="quiz-question">Grocery shopping at Whole Foods</div>
-                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">food</span></div>
-                <div class="explanation">Groceries are food expenses—they cover your daily nutrition.</div>
+            <div class="quiz-container" id="quizContainer">
+                <!-- Quiz items will be inserted here -->
             </div>
             
-            <div class="quiz-item">
-                <div class="quiz-question">Netflix subscription</div>
-                <div class="quiz-answer">You chose: <span class="user-answer">entertainment</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">entertainment</span></div>
-                <div class="explanation">Streaming services are entertainment expenses as they provide leisure content.</div>
+            <!-- Results summary (hidden initially) -->
+            <div id="resultsContainer" class="hidden">
+                <h2 class="results-header">Your Results</h2>
+                
+                <div class="score">You scored: <span id="finalScore">0/6</span></div>
+                <div class="encouragement">Keep learning! Proper categorization is key to budget success.</div>
+                
+                <h3 class="section-title">Your Budget Breakdown</h3>
+                
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+                
+                <h3 class="section-title">Quiz Results</h3>
+                <div id="quizResults">
+                    <!-- Quiz results will be inserted here -->
+                </div>
+                
+                <div class="tips-container">
+                    <h3 class="tips-header">Smart Budget Categorization Tips</h3>
+                    <ul class="tips-list">
+                        <li><strong>Use consistent categories</strong> - Create clear, non-overlapping spending categories that make sense for your lifestyle. Consistency helps identify spending patterns.</li>
+                        <li><strong>Track fixed vs. variable expenses</strong> - Separate your must-pay fixed costs from discretionary variable spending to identify where you have flexibility.</li>
+                        <li><strong>Create sub-categories</strong> - Break down major categories (like "Food") into meaningful sub-categories (Groceries, Dining Out, Coffee) to spot specific spending habits.</li>
+                        <li><strong>Review and refine monthly</strong> - Regularly audit your categories and adjust them as your spending habits and financial goals evolve.</li>
+                        <li><strong>Use digital tools</strong> - Consider specialized budgeting apps that automatically categorize transactions and allow custom category creation.</li>
+                    </ul>
+                </div>
+                
+                <button class="play-button" id="playAgainBtn">Play Again</button>
             </div>
-            
-            <div class="quiz-item">
-                <div class="quiz-question">Monthly internet bill</div>
-                <div class="quiz-answer">You chose: <span class="user-answer">utilities</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">utilities</span></div>
-                <div class="explanation">Internet service is a utility expense as it's an essential home service.</div>
-            </div>
-            
-            <div class="quiz-item">
-                <div class="quiz-question">Credit card payment</div>
-                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
-                <div class="quiz-answer">Correct: <span class="correct-answer">debt</span></div>
-                <div class="explanation">Credit card payments are debt expenses when paying off existing balances.</div>
-            </div>
-            
-            <div class="tips-container">
-                <h3 class="tips-header">Smart Budget Categorization Tips</h3>
-                <ul class="tips-list">
-                    <li><strong>Use consistent categories</strong> - Create clear, non-overlapping spending categories that make sense for your lifestyle. Consistency helps identify spending patterns.</li>
-                    <li><strong>Track fixed vs. variable expenses</strong> - Separate your must-pay fixed costs from discretionary variable spending to identify where you have flexibility.</li>
-                    <li><strong>Create sub-categories</strong> - Break down major categories (like "Food") into meaningful sub-categories (Groceries, Dining Out, Coffee) to spot specific spending habits.</li>
-                    <li><strong>Review and refine monthly</strong> - Regularly audit your categories and adjust them as your spending habits and financial goals evolve.</li>
-                    <li><strong>Use digital tools</strong> - Consider specialized budgeting apps that automatically categorize transactions and allow custom category creation.</li>
-                </ul>
-            </div>
-            
-            <button class="play-button">Play Again</button>
         </div>
     </div>
 
     <script>
-        // Create pie chart for budget breakdown
-        const ctx = document.getElementById('budgetChart').getContext('2d');
-        const budgetChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Housing', 'Transportation', 'Food', 'Utilities', 'Entertainment', 'Debt', 'Health', 'Savings'],
-                datasets: [{
-                    data: [20, 18, 15, 10, 12, 10, 8, 7],
-                    backgroundColor: [
-                        '#3498db',  // Housing
-                        '#2ecc71',  // Transportation
-                        '#e74c3c',  // Food
-                        '#f39c12',  // Utilities
-                        '#9b59b6',  // Entertainment
-                        '#e67e22',  // Debt
-                        '#1abc9c',  // Health
-                        '#34495e'   // Savings
-                    ],
-                    borderColor: [
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff',
-                        '#ffffff'
-                    ],
-                    borderWidth: 2
-                }]
+        // Quiz questions data
+        const questions = [
+            {
+                question: "Monthly rent payment",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "housing",
+                explanation: "Rent is a housing expense as it's the payment for your living space."
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 12
-                            },
-                            padding: 15
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.label}: ${context.raw}% of budget`;
+            {
+                question: "Car insurance payment",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "transportation",
+                explanation: "Insurance is a transportation expense because it's tied to your vehicle."
+            },
+            {
+                question: "Grocery shopping at Whole Foods",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "food",
+                explanation: "Groceries are food expenses—they cover your daily nutrition."
+            },
+            {
+                question: "Netflix subscription",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "entertainment",
+                explanation: "Streaming services are entertainment expenses as they provide leisure content."
+            },
+            {
+                question: "Monthly internet bill",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "utilities",
+                explanation: "Internet service is a utility expense as it's an essential home service."
+            },
+            {
+                question: "Credit card payment",
+                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
+                correct: "debt",
+                explanation: "Credit card payments are debt expenses when paying off existing balances."
+            }
+        ];
+
+        // Variables to track game state
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // DOM elements
+        const quizContainer = document.getElementById('quizContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const progressFill = document.getElementById('progressFill');
+        const currentQuestionElement = document.getElementById('currentQuestion');
+        const totalQuestionsElement = document.getElementById('totalQuestions');
+        const finalScoreElement = document.getElementById('finalScore');
+        const quizResultsElement = document.getElementById('quizResults');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+
+        // Initialize the game
+        function initGame() {
+            // Set total questions
+            totalQuestionsElement.textContent = questions.length;
+            
+            // Reset game state
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            score = 0;
+            
+            // Hide results, show quiz
+            resultsContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            
+            // Display first question
+            displayQuestion(currentQuestionIndex);
+        }
+
+        // Display a question
+        function displayQuestion(index) {
+            // Clear previous question
+            quizContainer.innerHTML = '';
+            
+            // Update progress
+            currentQuestionElement.textContent = index + 1;
+            progressFill.style.width = `${((index + 1) / questions.length) * 100}%`;
+            
+            // Create question element
+            const questionData = questions[index];
+            const quizItem = document.createElement('div');
+            quizItem.className = 'quiz-item';
+            quizItem.id = `question-${index}`;
+            
+            // Add question text
+            const questionText = document.createElement('div');
+            questionText.className = 'quiz-question';
+            questionText.textContent = questionData.question;
+            quizItem.appendChild(questionText);
+            
+            // Add options
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            questionData.options.forEach(option => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option.charAt(0).toUpperCase() + option.slice(1);
+                optionBtn.dataset.option = option;
+                
+                // Add click event - automatically submit answer when clicked
+                optionBtn.addEventListener('click', function() {
+                    selectAnswer(option);
+                });
+                
+                optionsContainer.appendChild(optionBtn);
+            });
+            
+            quizItem.appendChild(optionsContainer);
+            quizContainer.appendChild(quizItem);
+        }
+
+        // Select answer and go to next question
+        function selectAnswer(selectedOption) {
+            // Save user answer
+            userAnswers[currentQuestionIndex] = selectedOption;
+            
+            // Check if answer is correct
+            if (selectedOption === questions[currentQuestionIndex].correct) {
+                score++;
+            }
+            
+            // Move to next question or end game
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                showResults();
+            }
+        }
+
+        // Show results summary
+        function showResults() {
+            // Hide quiz, show results
+            quizContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            
+            // Update score display
+            finalScoreElement.textContent = `${score}/${questions.length}`;
+            
+            // Generate quiz results details
+            quizResultsElement.innerHTML = '';
+            
+            for (let i = 0; i < questions.length; i++) {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'quiz-item';
+                
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.textContent = questions[i].question;
+                
+                const userAnswerDiv = document.createElement('div');
+                userAnswerDiv.className = 'quiz-answer';
+                userAnswerDiv.innerHTML = `You chose: <span class="user-answer">${userAnswers[i]}</span>`;
+                
+                const correctAnswerDiv = document.createElement('div');
+                correctAnswerDiv.className = 'quiz-answer';
+                correctAnswerDiv.innerHTML = `Correct: <span class="correct-answer">${questions[i].correct}</span>`;
+                
+                const explanationDiv = document.createElement('div');
+                explanationDiv.className = 'explanation';
+                explanationDiv.textContent = questions[i].explanation;
+                
+                resultItem.appendChild(questionDiv);
+                resultItem.appendChild(userAnswerDiv);
+                resultItem.appendChild(correctAnswerDiv);
+                resultItem.appendChild(explanationDiv);
+                
+                quizResultsElement.appendChild(resultItem);
+            }
+            
+            // Create and display pie chart
+            createBudgetChart();
+        }
+
+        // Create pie chart for budget breakdown
+        function createBudgetChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            // Check if chart already exists and destroy it
+            if (window.budgetChart) {
+                window.budgetChart.destroy();
+            }
+            
+            window.budgetChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Housing', 'Transportation', 'Food', 'Utilities', 'Entertainment', 'Debt', 'Health', 'Savings'],
+                    datasets: [{
+                        data: [20, 18, 15, 10, 12, 10, 8, 7],
+                        backgroundColor: [
+                            '#3498db',  // Housing
+                            '#2ecc71',  // Transportation
+                            '#e74c3c',  // Food
+                            '#f39c12',  // Utilities
+                            '#9b59b6',  // Entertainment
+                            '#e67e22',  // Debt
+                            '#1abc9c',  // Health
+                            '#34495e'   // Savings
+                        ],
+                        borderColor: [
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff',
+                            '#ffffff'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}% of budget`;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        // Play again button
+        playAgainBtn.addEventListener('click', initGame);
+
+        // Initialize the game when page loads
+        window.onload = initGame;
     </script>
 </body>
 </html>
