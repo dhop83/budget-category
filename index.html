@@ -81,11 +81,6 @@
             border-color: #3498db;
             color: #3498db;
         }
-        .option-btn.selected {
-            background-color: #3498db;
-            color: white;
-            border-color: #3498db;
-        }
         .progress-container {
             margin: 30px 0;
             position: relative;
@@ -220,18 +215,18 @@
             display: none;
         }
     </style>
+    <!-- Load Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Budget Category Master</h1>
         </div>
-        
         <div class="card">
             <div class="instructions">
                 Test your knowledge of <span class="highlight">budget categories</span>! For each expense shown, select the correct budget category. See if you can become a Budget Category Master!
             </div>
-            
             <div class="budget-info">
                 <h3>Common Budget Categories</h3>
                 <div class="category-list">
@@ -246,36 +241,23 @@
                 </div>
                 <p>Properly categorizing your expenses is the first step toward effective budgeting. Use these standard categories to organize your spending!</p>
             </div>
-            
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
                 <div class="progress-text"><span id="currentQuestion">1</span> of <span id="totalQuestions">6</span> questions</div>
             </div>
-            
-            <div class="quiz-container" id="quizContainer">
-                <!-- Quiz items will be inserted here -->
-            </div>
-            
-            <!-- Results summary (hidden initially) -->
+            <div class="quiz-container" id="quizContainer"></div>
             <div id="resultsContainer" class="hidden">
                 <h2 class="results-header">Your Results</h2>
-                
                 <div class="score">You scored: <span id="finalScore">0/6</span></div>
                 <div class="encouragement">Keep learning! Proper categorization is key to budget success.</div>
-                
                 <h3 class="section-title">Your Budget Breakdown</h3>
-                
                 <div class="chart-container">
                     <canvas id="budgetChart"></canvas>
                 </div>
-                
                 <h3 class="section-title">Quiz Results</h3>
-                <div id="quizResults">
-                    <!-- Quiz results will be inserted here -->
-                </div>
-                
+                <div id="quizResults"></div>
                 <div class="tips-container">
                     <h3 class="tips-header">Smart Budget Categorization Tips</h3>
                     <ul class="tips-list">
@@ -286,59 +268,20 @@
                         <li><strong>Use digital tools</strong> - Consider specialized budgeting apps that automatically categorize transactions and allow custom category creation.</li>
                     </ul>
                 </div>
-                
                 <button class="play-button" id="playAgainBtn">Play Again</button>
             </div>
         </div>
     </div>
-
     <script>
-        // Quiz questions data
         const questions = [
-            {
-                question: "Monthly rent payment",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "housing",
-                explanation: "Rent is a housing expense as it's the payment for your living space."
-            },
-            {
-                question: "Car insurance payment",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "transportation",
-                explanation: "Insurance is a transportation expense because it's tied to your vehicle."
-            },
-            {
-                question: "Grocery shopping at Whole Foods",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "food",
-                explanation: "Groceries are food expenses—they cover your daily nutrition."
-            },
-            {
-                question: "Netflix subscription",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "entertainment",
-                explanation: "Streaming services are entertainment expenses as they provide leisure content."
-            },
-            {
-                question: "Monthly internet bill",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "utilities",
-                explanation: "Internet service is a utility expense as it's an essential home service."
-            },
-            {
-                question: "Credit card payment",
-                options: ["housing", "transportation", "food", "utilities", "entertainment", "debt"],
-                correct: "debt",
-                explanation: "Credit card payments are debt expenses when paying off existing balances."
-            }
+            { question: "Monthly rent payment", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "housing", explanation: "Rent is a housing expense as it's the payment for your living space."},
+            { question: "Car insurance payment", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "transportation", explanation: "Insurance is a transportation expense because it's tied to your vehicle."},
+            { question: "Grocery shopping at Whole Foods", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "food", explanation: "Groceries are food expenses—they cover your daily nutrition."},
+            { question: "Netflix subscription", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "entertainment", explanation: "Streaming services are entertainment expenses as they provide leisure content."},
+            { question: "Monthly internet bill", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "utilities", explanation: "Internet service is a utility expense as it's an essential home service."},
+            { question: "Credit card payment", options: ["housing","transportation","food","utilities","entertainment","debt"], correct: "debt", explanation: "Credit card payments are debt expenses when paying off existing balances."}
         ];
-
-        // Variables to track game state
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let score = 0;
-
-        // DOM elements
+        let currentQuestionIndex = 0, userAnswers = [], score = 0;
         const quizContainer = document.getElementById('quizContainer');
         const resultsContainer = document.getElementById('resultsContainer');
         const progressFill = document.getElementById('progressFill');
@@ -347,198 +290,59 @@
         const finalScoreElement = document.getElementById('finalScore');
         const quizResultsElement = document.getElementById('quizResults');
         const playAgainBtn = document.getElementById('playAgainBtn');
-
-        // Initialize the game
         function initGame() {
-            // Set total questions
             totalQuestionsElement.textContent = questions.length;
-            
-            // Reset game state
-            currentQuestionIndex = 0;
-            userAnswers = [];
-            score = 0;
-            
-            // Hide results, show quiz
+            currentQuestionIndex = 0; userAnswers = []; score = 0;
             resultsContainer.classList.add('hidden');
             quizContainer.classList.remove('hidden');
-            
-            // Display first question
             displayQuestion(currentQuestionIndex);
         }
-
-        // Display a question
         function displayQuestion(index) {
-            // Clear previous question
             quizContainer.innerHTML = '';
-            
-            // Update progress
             currentQuestionElement.textContent = index + 1;
-            progressFill.style.width = `${((index + 1) / questions.length) * 100}%`;
-            
-            // Create question element
-            const questionData = questions[index];
-            const quizItem = document.createElement('div');
-            quizItem.className = 'quiz-item';
-            quizItem.id = `question-${index}`;
-            
-            // Add question text
-            const questionText = document.createElement('div');
-            questionText.className = 'quiz-question';
-            questionText.textContent = questionData.question;
-            quizItem.appendChild(questionText);
-            
-            // Add options
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = 'options-container';
-            
-            questionData.options.forEach(option => {
-                const optionBtn = document.createElement('button');
-                optionBtn.className = 'option-btn';
-                optionBtn.textContent = option.charAt(0).toUpperCase() + option.slice(1);
-                optionBtn.dataset.option = option;
-                
-                // Add click event - automatically submit answer when clicked
-                optionBtn.addEventListener('click', function() {
-                    selectAnswer(option);
-                });
-                
-                optionsContainer.appendChild(optionBtn);
+            progressFill.style.width = `${((index+1)/questions.length)*100}%`;
+            const q = questions[index];
+            const item = document.createElement('div'); item.className = 'quiz-item';
+            const qText = document.createElement('div'); qText.className = 'quiz-question'; qText.textContent = q.question; item.appendChild(qText);
+            const opts = document.createElement('div'); opts.className = 'options-container';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = opt.charAt(0).toUpperCase()+opt.slice(1); btn.dataset.option=opt;
+                btn.addEventListener('click', () => selectAnswer(opt));
+                opts.appendChild(btn);
             });
-            
-            quizItem.appendChild(optionsContainer);
-            quizContainer.appendChild(quizItem);
+            item.appendChild(opts);
+            quizContainer.appendChild(item);
         }
-
-        // Select answer and go to next question
-        function selectAnswer(selectedOption) {
-            // Save user answer
-            userAnswers[currentQuestionIndex] = selectedOption;
-            
-            // Check if answer is correct
-            if (selectedOption === questions[currentQuestionIndex].correct) {
-                score++;
-            }
-            
-            // Move to next question or end game
+        function selectAnswer(opt) {
+            userAnswers[currentQuestionIndex]=opt;
+            if(opt===questions[currentQuestionIndex].correct) score++;
             currentQuestionIndex++;
-            
-            if (currentQuestionIndex < questions.length) {
-                displayQuestion(currentQuestionIndex);
-            } else {
-                showResults();
-            }
+            if(currentQuestionIndex<questions.length) displayQuestion(currentQuestionIndex);
+            else showResults();
         }
-
-        // Show results summary
         function showResults() {
-            // Hide quiz, show results
-            quizContainer.classList.add('hidden');
-            resultsContainer.classList.remove('hidden');
-            
-            // Update score display
+            quizContainer.classList.add('hidden'); resultsContainer.classList.remove('hidden');
             finalScoreElement.textContent = `${score}/${questions.length}`;
-            
-            // Generate quiz results details
             quizResultsElement.innerHTML = '';
-            
-            for (let i = 0; i < questions.length; i++) {
-                const resultItem = document.createElement('div');
-                resultItem.className = 'quiz-item';
-                
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'quiz-question';
-                questionDiv.textContent = questions[i].question;
-                
-                const userAnswerDiv = document.createElement('div');
-                userAnswerDiv.className = 'quiz-answer';
-                userAnswerDiv.innerHTML = `You chose: <span class="user-answer">${userAnswers[i]}</span>`;
-                
-                const correctAnswerDiv = document.createElement('div');
-                correctAnswerDiv.className = 'quiz-answer';
-                correctAnswerDiv.innerHTML = `Correct: <span class="correct-answer">${questions[i].correct}</span>`;
-                
-                const explanationDiv = document.createElement('div');
-                explanationDiv.className = 'explanation';
-                explanationDiv.textContent = questions[i].explanation;
-                
-                resultItem.appendChild(questionDiv);
-                resultItem.appendChild(userAnswerDiv);
-                resultItem.appendChild(correctAnswerDiv);
-                resultItem.appendChild(explanationDiv);
-                
-                quizResultsElement.appendChild(resultItem);
-            }
-            
-            // Create and display pie chart
+            questions.forEach((q,i)=>{
+                const r = document.createElement('div'); r.className='quiz-item';
+                r.innerHTML = `<div class="quiz-question">${q.question}</div>
+                               <div class="quiz-answer">You chose: <span class="user-answer">${userAnswers[i]}</span></div>
+                               <div class="quiz-answer">Correct: <span class="correct-answer">${q.correct}</span></div>
+                               <div class="explanation">${q.explanation}</div>`;
+                quizResultsElement.appendChild(r);
+            });
             createBudgetChart();
         }
-
-        // Create pie chart for budget breakdown
         function createBudgetChart() {
             const ctx = document.getElementById('budgetChart').getContext('2d');
-            
-            // Check if chart already exists and destroy it
-            if (window.budgetChart) {
-                window.budgetChart.destroy();
-            }
-            
+            if(window.budgetChart) window.budgetChart.destroy();
             window.budgetChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Housing', 'Transportation', 'Food', 'Utilities', 'Entertainment', 'Debt', 'Health', 'Savings'],
-                    datasets: [{
-                        data: [20, 18, 15, 10, 12, 10, 8, 7],
-                        backgroundColor: [
-                            '#3498db',  // Housing
-                            '#2ecc71',  // Transportation
-                            '#e74c3c',  // Food
-                            '#f39c12',  // Utilities
-                            '#9b59b6',  // Entertainment
-                            '#e67e22',  // Debt
-                            '#1abc9c',  // Health
-                            '#34495e'   // Savings
-                        ],
-                        borderColor: [
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff',
-                            '#ffffff'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    size: 12
-                                },
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}% of budget`;
-                                }
-                            }
-                        }
-                    }
-                }
+                type: 'pie', data: { labels: ['Housing','Transportation','Food','Utilities','Entertainment','Debt','Health','Savings'], datasets:[{ data:[20,18,15,10,12,10,8,7], backgroundColor:['#3498db','#2ecc71','#e74c3c','#f39c12','#9b59b6','#e67e22','#1abc9c','#34495e'], borderWidth:2 }]},
+                options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{ size:12 }, padding:15 } }, tooltip:{ callbacks:{ label:context=>`${context.label}: ${context.raw}% of budget` } } } }
             });
         }
-
-        // Play again button
         playAgainBtn.addEventListener('click', initGame);
-
-        // Initialize the game when page loads
         window.onload = initGame;
     </script>
 </body>
