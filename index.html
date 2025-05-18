@@ -94,7 +94,6 @@
     .score-summary { font-size: 18px; margin: 20px 0; }
     .confetti {
       position: fixed;
-      animation: confetti-fall 3s ease-in-out forwards;
       z-index: 999;
     }
     @keyframes confetti-fall {
@@ -138,43 +137,16 @@
       border-top: 1px solid #e0e0e0;
     }
   </style>
-  <script>
-    // All possible expense data and helper functions go here...
-    // (your full JS as before, up through createConfetti())
-
-    // Play celebration sound
-    function playSuccessSound() {
-      try {
-        const audioContext = new (window.AudioContext||window.webkitAudioContext)();
-        const playNote = (freq, start, dur, vol) => {
-          const osc = audioContext.createOscillator();
-          const gain = audioContext.createGain();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          gain.gain.value = vol;
-          osc.connect(gain);
-          gain.connect(audioContext.destination);
-          osc.start(start);
-          osc.stop(start + dur);
-        };
-        playNote(523.25, 0,   0.2, 0.5);
-        playNote(659.25, 0.2, 0.2, 0.5);
-        playNote(783.99, 0.4, 0.2, 0.5);
-      } catch(e) {
-        console.error("Sound error:", e);
-      }
-    }
-  </script>
 </head>
 <body>
   <h1>Budget Category Master</h1>
 
-  <!-- Start Screen (now active!) -->
+  <!-- START SCREEN -->
   <div id="screen-start" class="screen active">
     <h2>Learn to Master Budget Categories!</h2>
     <p>Test your knowledge about categorizing expenses properly in a budget.</p>
     <button id="start-button" class="button">Start Game</button>
-    <button id="how-to-play" class="button">How to Play</button>
+    <button id="how-to-play"  class="button">How to Play</button>
     <div class="tips-box">
       <h3>Why Budget Categories Matter</h3>
       <ul>
@@ -186,11 +158,11 @@
     </div>
   </div>
 
-  <!-- How to Play Screen -->
+  <!-- HOW TO PLAY -->
   <div id="screen-how-to-play" class="screen">
     <h2>How to Play</h2>
-    <p>You'll be shown different expenses one at a time.</p>
-    <p>For each expense, decide which budget category it belongs in:</p>
+    <p>You’ll be shown different expenses one at a time.</p>
+    <p>Decide which budget category each belongs in:</p>
     <div class="category-help">
       <div><span class="category-button housing">Housing</span> <span class="category-description">Rent, mortgage, repairs…</span></div>
       <div><span class="category-button transportation">Transportation</span> <span class="category-description">Car, gas, transit…</span></div>
@@ -198,13 +170,13 @@
       <div><span class="category-button utilities">Utilities</span> <span class="category-description">Electric, water, internet…</span></div>
       <div><span class="category-button entertainment">Entertainment</span> <span class="category-description">Movies, hobbies…</span></div>
       <div><span class="category-button health">Health</span> <span class="category-description">Doctor visits, meds…</span></div>
-      <div><span class="category-button debt">Debt Payment</span> <span class="category-description">Loans, credit cards…</span></div>
+      <div><span class="category-button debt">Debt</span> <span class="category-description">Loans, credit cards…</span></div>
       <div><span class="category-button savings">Savings</span> <span class="category-description">Emergency fund, retirement…</span></div>
     </div>
     <button id="back-to-start" class="button">Back to Start</button>
   </div>
 
-  <!-- Game Screen -->
+  <!-- GAME SCREEN -->
   <div id="screen-game" class="screen">
     <div class="progress-bar"><div id="progress" class="progress" style="width:0%"></div></div>
     <h2>Categorize This Expense:</h2>
@@ -213,22 +185,22 @@
       <div class="expense-amount">$<span id="expense-amount"></span></div>
     </div>
     <div class="category-options">
-      <button class="category-button housing" data-category="housing">Housing</button>
+      <button class="category-button housing"       data-category="housing">Housing</button>
       <button class="category-button transportation" data-category="transportation">Transportation</button>
-      <button class="category-button food" data-category="food">Food</button>
-      <button class="category-button utilities" data-category="utilities">Utilities</button>
+      <button class="category-button food"          data-category="food">Food</button>
+      <button class="category-button utilities"     data-category="utilities">Utilities</button>
       <button class="category-button entertainment" data-category="entertainment">Entertainment</button>
-      <button class="category-button health" data-category="health">Health</button>
-      <button class="category-button debt" data-category="debt">Debt</button>
-      <button class="category-button savings" data-category="savings">Savings</button>
+      <button class="category-button health"        data-category="health">Health</button>
+      <button class="category-button debt"          data-category="debt">Debt</button>
+      <button class="category-button savings"       data-category="savings">Savings</button>
     </div>
-    <div id="show-help" class="help-toggle">Need help with categories?</div>
+    <div id="show-help" class="help-toggle">Need help?</div>
     <div id="category-help" class="category-help" style="display:none;">
-      <!-- same list as above -->
+      <!-- repeat the category-description list or omit for brevity -->
     </div>
   </div>
 
-  <!-- Results Screen -->
+  <!-- RESULTS SCREEN -->
   <div id="screen-results" class="screen">
     <h2>Your Results</h2>
     <div class="score-summary">
@@ -255,5 +227,191 @@
   <footer>
     Copyright 2025 Dale Hopkinson. All Rights Reserved.
   </footer>
+
+  <script>
+  // —————————————————————————————————————————
+  // DATA & HELPER FUNCTIONS
+  // —————————————————————————————————————————
+
+  const allExpenseItems = [
+    { description: "Monthly rent payment", amount: "1200.00", category: "housing",
+      explanation: "Rent is a housing expense as it's the payment for your living space." },
+    { description: "Grocery shopping at Whole Foods", amount: "85.73", category: "food",
+      explanation: "Groceries are food expenses—they cover your daily nutrition." },
+    { description: "Car insurance payment", amount: "110.50", category: "transportation",
+      explanation: "Insurance is a transportation expense because it's tied to your vehicle." },
+    /* …add all the rest of your items here… */
+  ];
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(screenId).classList.add('active');
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function selectRandomItems(count = 15) {
+    return shuffleArray([...allExpenseItems]).slice(0, count);
+  }
+
+  // —————————————————————————————————————————
+  // GAME STATE & FLOW
+  // —————————————————————————————————————————
+
+  let gameItems = [], currentItemIndex = 0, score = 0, userAnswers = [];
+
+  function showNextItem() {
+    if (currentItemIndex >= gameItems.length) {
+      endGame();
+      return;
+    }
+    const item = gameItems[currentItemIndex];
+    $('expense-description').textContent = item.description;
+    $('expense-amount').textContent = item.amount;
+    $('progress').style.width = (currentItemIndex / gameItems.length * 100) + '%';
+  }
+
+  function handleAnswer(chosen) {
+    const item = gameItems[currentItemIndex];
+    const correct = (chosen === item.category);
+    if (correct) score++;
+    userAnswers.push({
+      ...item,
+      userCategory: chosen,
+      isCorrect: correct
+    });
+    currentItemIndex++;
+    showNextItem();
+  }
+
+  function endGame() {
+    showScreen('screen-results');
+    $('final-score').textContent = score;
+    $('total-questions').textContent = gameItems.length;
+    $('score-message').textContent =
+      score === gameItems.length
+        ? 'Perfect! 🎉'
+        : 'Nice try!';
+    if (score === gameItems.length) {
+      createConfetti();
+      playSuccessSound();
+    }
+    // Build category distribution bars
+    const dist = {};
+    gameItems.forEach(i => {
+      dist[i.category] = (dist[i.category] || 0) + 1;
+    });
+    const cd = $('category-distribution');
+    cd.innerHTML = '';
+    Object.entries(dist).forEach(([cat, cnt]) => {
+      const pct = Math.round(cnt / gameItems.length * 100);
+      const bar = document.createElement('div');
+      bar.className = 'category-bar';
+      const fill = document.createElement('div');
+      fill.className = 'category-fill ' + cat;
+      fill.style.width = pct + '%';
+      const label = document.createElement('div');
+      label.className = 'category-label';
+      label.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+      const percent = document.createElement('div');
+      percent.className = 'category-percent';
+      percent.textContent = pct + '%';
+      bar.append(fill, label, percent);
+      cd.appendChild(bar);
+    });
+    // Show detailed feedback
+    const rd = $('results-details');
+    rd.innerHTML = '';
+    userAnswers.forEach(a => {
+      const box = document.createElement('div');
+      box.className = 'result-box ' + (a.isCorrect ? 'correct' : 'incorrect');
+      box.innerHTML = `
+        <strong>${a.description}</strong><br/>
+        You chose: <em>${a.userCategory}</em><br/>
+        Correct: <em>${a.category}</em><br/>
+        <small>${a.explanation}</small>
+      `;
+      rd.appendChild(box);
+    });
+  }
+
+  // —————————————————————————————————————————
+  // CELEBRATION EFFECTS
+  // —————————————————————————————————————————
+
+  function createConfetti() {
+    for (let i = 0; i < 80; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100 + '%';
+      const colors = ['#3498db','#2ecc71','#e74c3c','#f39c12','#9b59b6','#1abc9c'];
+      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      const size = Math.random()*8 + 5;
+      c.style.width = size + 'px';
+      c.style.height = size + 'px';
+      c.style.animation = `confetti-fall ${Math.random()*2+2}s ease-in-out forwards`;
+      document.body.appendChild(c);
+      setTimeout(()=> c.remove(), 5000);
+    }
+  }
+
+  function playSuccessSound() {
+    try {
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      const note = (f, t, d, v) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.value = f;
+        gain.gain.value = v;
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t); osc.stop(t + d);
+      };
+      note(523.25, 0,   0.2, 0.5);
+      note(659.25, 0.2, 0.2, 0.5);
+      note(783.99, 0.4, 0.2, 0.5);
+    } catch(e) {
+      console.error('Sound error', e);
+    }
+  }
+
+  // —————————————————————————————————————————
+  // WIRE UP THE BUTTONS
+  // —————————————————————————————————————————
+
+  document.addEventListener('DOMContentLoaded', () => {
+    $('start-button').addEventListener('click', () => {
+      gameItems = selectRandomItems();
+      currentItemIndex = 0;
+      score = 0;
+      userAnswers = [];
+      showScreen('screen-game');
+      showNextItem();
+    });
+    $('how-to-play').addEventListener('click', () => showScreen('screen-how-to-play'));
+    $('back-to-start').addEventListener('click', () => showScreen('screen-start'));
+    $('play-again').addEventListener('click', () => showScreen('screen-start'));
+
+    document.querySelectorAll('#screen-game .category-button')
+      .forEach(btn => {
+        btn.addEventListener('click', () => handleAnswer(btn.dataset.category));
+      });
+
+    // Help toggle
+    $('show-help').addEventListener('click', () => {
+      const h = $('category-help');
+      h.style.display = (h.style.display === 'none') ? 'block' : 'none';
+    });
+  });
+  </script>
 </body>
 </html>
