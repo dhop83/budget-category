@@ -1,417 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Budget Category Master</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      text-align: center;
-      background-color: #f5f5f5;
-      overflow-x: hidden;
-    }
-    .screen {
-      display: none;
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-top: 20px;
-    }
-    .active {
-      display: block;
-    }
-    h1 { color: #2c3e50; margin-bottom: 30px; }
-    h2 { color: #3498db; }
-    .button {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 25px;
-      cursor: pointer;
-      margin: 10px;
-      transition: background-color 0.3s;
-    }
-    .button:hover { background-color: #2980b9; }
-    .expense-item {
-      background-color: #ecf0f1;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 20px auto;
-      max-width: 500px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .expense-amount {
-      font-size: 24px;
-      font-weight: bold;
-      color: #16a085;
-    }
-    .category-options {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .category-button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-    .category-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .housing { background-color: #3498db; color: white; }
-    .transportation { background-color: #2ecc71; color: white; }
-    .food { background-color: #e74c3c; color: white; }
-    .utilities { background-color: #f39c12; color: white; }
-    .entertainment { background-color: #9b59b6; color: white; }
-    .health { background-color: #1abc9c; color: white; }
-    .debt { background-color: #e67e22; color: white; }
-    .savings { background-color: #34495e; color: white; }
-    .progress-bar {
-      height: 10px;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      margin: 20px 0;
-      overflow: hidden;
-    }
-    .progress {
-      height: 100%;
-      background-color: #3498db;
-      transition: width 0.5s;
-    }
-    .score-summary { font-size: 18px; margin: 20px 0; }
-    .confetti {
-      position: fixed;
-      z-index: 999;
-    }
-    @keyframes confetti-fall {
-      0%   { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh)  rotate(720deg); opacity: 0; }
-    }
-    .perfect-score {
-      animation: pulse 1s infinite;
-      color: #e74c3c;
-      font-weight: bold;
-    }
-    @keyframes pulse {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    .category-help, .tips-box {
-      margin-top: 15px;
-      padding: 15px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      text-align: left;
-    }
-    .help-toggle {
-      color: #3498db;
-      cursor: pointer;
-      text-decoration: underline;
-      margin-top: 10px;
-      display: inline-block;
-    }
-    .category-description {
-      margin-top: 10px;
-      font-style: italic;
-      color: #7f8c8d;
-    }
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      font-size: 14px;
-      color: #7f8c8d;
-      border-top: 1px solid #e0e0e0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Category Master</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+        .results-header {
+            text-align: center;
+            color: #3498db;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        .score {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        .score span {
+            font-weight: bold;
+            color: #3498db;
+        }
+        .encouragement {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #555;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            margin: 40px 0 25px;
+            color: #2c3e50;
+        }
+        .chart-container {
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+        .quiz-item {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+        }
+        .quiz-question {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .quiz-answer {
+            margin: 8px 0;
+        }
+        .user-answer {
+            color: #e74c3c;
+            font-weight: normal;
+        }
+        .correct-answer {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .explanation {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .tips-container {
+            background-color: #EBF5FB;
+            border-radius: 8px;
+            padding: 25px;
+        }
+        .tips-header {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #2980b9;
+        }
+        .tips-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .tips-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        .tips-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .play-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .play-button:hover {
+            background-color: #2980b9;
+        }
+        .highlight {
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
-  <h1>Budget Category Master</h1>
-
-  <!-- START SCREEN -->
-  <div id="screen-start" class="screen active">
-    <h2>Learn to Master Budget Categories!</h2>
-    <p>Test your knowledge about categorizing expenses properly in a budget.</p>
-    <button id="start-button" class="button">Start Game</button>
-    <button id="how-to-play"  class="button">How to Play</button>
-    <div class="tips-box">
-      <h3>Why Budget Categories Matter</h3>
-      <ul>
-        <li>Identify spending patterns</li>
-        <li>Find areas to cut back</li>
-        <li>Make informed financial decisions</li>
-        <li>Plan for future expenses</li>
-      </ul>
+    <div class="container">
+        <div class="header">
+            <h1>Budget Category Master</h1>
+        </div>
+        
+        <div class="card">
+            <h2 class="results-header">Your Results</h2>
+            
+            <div class="score">You scored: <span>4/6</span></div>
+            <div class="encouragement">Keep learning! Proper categorization is key to budget success.</div>
+            
+            <h3 class="section-title">Your Budget Breakdown</h3>
+            
+            <div class="chart-container">
+                <canvas id="budgetChart"></canvas>
+            </div>
+            
+            <h3 class="section-title">Quiz Results</h3>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Monthly rent payment</div>
+                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">housing</span></div>
+                <div class="explanation">Rent is a housing expense as it's the payment for your living space.</div>
+            </div>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Car insurance payment</div>
+                <div class="quiz-answer">You chose: <span class="user-answer transportation">transportation</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">transportation</span></div>
+                <div class="explanation">Insurance is a transportation expense because it's tied to your vehicle.</div>
+            </div>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Grocery shopping at Whole Foods</div>
+                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">food</span></div>
+                <div class="explanation">Groceries are food expenses—they cover your daily nutrition.</div>
+            </div>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Netflix subscription</div>
+                <div class="quiz-answer">You chose: <span class="user-answer">entertainment</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">entertainment</span></div>
+                <div class="explanation">Streaming services are entertainment expenses as they provide leisure content.</div>
+            </div>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Monthly internet bill</div>
+                <div class="quiz-answer">You chose: <span class="user-answer">utilities</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">utilities</span></div>
+                <div class="explanation">Internet service is a utility expense as it's an essential home service.</div>
+            </div>
+            
+            <div class="quiz-item">
+                <div class="quiz-question">Credit card payment</div>
+                <div class="quiz-answer">You chose: <span class="user-answer">transportation</span></div>
+                <div class="quiz-answer">Correct: <span class="correct-answer">debt</span></div>
+                <div class="explanation">Credit card payments are debt expenses when paying off existing balances.</div>
+            </div>
+            
+            <div class="tips-container">
+                <h3 class="tips-header">Smart Budget Categorization Tips</h3>
+                <ul class="tips-list">
+                    <li><strong>Use consistent categories</strong> - Create clear, non-overlapping spending categories that make sense for your lifestyle. Consistency helps identify spending patterns.</li>
+                    <li><strong>Track fixed vs. variable expenses</strong> - Separate your must-pay fixed costs from discretionary variable spending to identify where you have flexibility.</li>
+                    <li><strong>Create sub-categories</strong> - Break down major categories (like "Food") into meaningful sub-categories (Groceries, Dining Out, Coffee) to spot specific spending habits.</li>
+                    <li><strong>Review and refine monthly</strong> - Regularly audit your categories and adjust them as your spending habits and financial goals evolve.</li>
+                    <li><strong>Use digital tools</strong> - Consider specialized budgeting apps that automatically categorize transactions and allow custom category creation.</li>
+                </ul>
+            </div>
+            
+            <button class="play-button">Play Again</button>
+        </div>
     </div>
-  </div>
 
-  <!-- HOW TO PLAY -->
-  <div id="screen-how-to-play" class="screen">
-    <h2>How to Play</h2>
-    <p>You’ll be shown different expenses one at a time.</p>
-    <p>Decide which budget category each belongs in:</p>
-    <div class="category-help">
-      <div><span class="category-button housing">Housing</span> <span class="category-description">Rent, mortgage, repairs…</span></div>
-      <div><span class="category-button transportation">Transportation</span> <span class="category-description">Car, gas, transit…</span></div>
-      <div><span class="category-button food">Food</span> <span class="category-description">Groceries, dining out…</span></div>
-      <div><span class="category-button utilities">Utilities</span> <span class="category-description">Electric, water, internet…</span></div>
-      <div><span class="category-button entertainment">Entertainment</span> <span class="category-description">Movies, hobbies…</span></div>
-      <div><span class="category-button health">Health</span> <span class="category-description">Doctor visits, meds…</span></div>
-      <div><span class="category-button debt">Debt</span> <span class="category-description">Loans, credit cards…</span></div>
-      <div><span class="category-button savings">Savings</span> <span class="category-description">Emergency fund, retirement…</span></div>
-    </div>
-    <button id="back-to-start" class="button">Back to Start</button>
-  </div>
-
-  <!-- GAME SCREEN -->
-  <div id="screen-game" class="screen">
-    <div class="progress-bar"><div id="progress" class="progress" style="width:0%"></div></div>
-    <h2>Categorize This Expense:</h2>
-    <div class="expense-item">
-      <div id="expense-description"></div>
-      <div class="expense-amount">$<span id="expense-amount"></span></div>
-    </div>
-    <div class="category-options">
-      <button class="category-button housing"       data-category="housing">Housing</button>
-      <button class="category-button transportation" data-category="transportation">Transportation</button>
-      <button class="category-button food"          data-category="food">Food</button>
-      <button class="category-button utilities"     data-category="utilities">Utilities</button>
-      <button class="category-button entertainment" data-category="entertainment">Entertainment</button>
-      <button class="category-button health"        data-category="health">Health</button>
-      <button class="category-button debt"          data-category="debt">Debt</button>
-      <button class="category-button savings"       data-category="savings">Savings</button>
-    </div>
-    <div id="show-help" class="help-toggle">Need help?</div>
-    <div id="category-help" class="category-help" style="display:none;">
-      <!-- repeat the category-description list or omit for brevity -->
-    </div>
-  </div>
-
-  <!-- RESULTS SCREEN -->
-  <div id="screen-results" class="screen">
-    <h2>Your Results</h2>
-    <div class="score-summary">
-      <p>You scored: <span id="final-score"></span>/<span id="total-questions">15</span></p>
-      <p id="score-message"></p>
-    </div>
-    <div class="category-summary">
-      <h3>Your Budget Breakdown</h3>
-      <div id="category-distribution"></div>
-    </div>
-    <div class="tips-box">
-      <h3>Budgeting Tips</h3>
-      <ul>
-        <li>Use the 50/30/20 rule</li>
-        <li>Review monthly to catch overspending</li>
-        <li>Include irregular expenses</li>
-        <li>Try a budgeting app</li>
-      </ul>
-    </div>
-    <div id="results-details"></div>
-    <button id="play-again" class="button">Play Again</button>
-  </div>
-
-  <footer>
-    Copyright 2025 Dale Hopkinson. All Rights Reserved.
-  </footer>
-
-  <script>
-  // —————————————————————————————————————————
-  // DATA & HELPER FUNCTIONS
-  // —————————————————————————————————————————
-
-  const allExpenseItems = [
-    { description: "Monthly rent payment", amount: "1200.00", category: "housing",
-      explanation: "Rent is a housing expense as it's the payment for your living space." },
-    { description: "Grocery shopping at Whole Foods", amount: "85.73", category: "food",
-      explanation: "Groceries are food expenses—they cover your daily nutrition." },
-    { description: "Car insurance payment", amount: "110.50", category: "transportation",
-      explanation: "Insurance is a transportation expense because it's tied to your vehicle." },
-    /* …add all the rest of your items here… */
-  ];
-
-  function $(id) {
-    return document.getElementById(id);
-  }
-
-  function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    $(screenId).classList.add('active');
-  }
-
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function selectRandomItems(count = 15) {
-    return shuffleArray([...allExpenseItems]).slice(0, count);
-  }
-
-  // —————————————————————————————————————————
-  // GAME STATE & FLOW
-  // —————————————————————————————————————————
-
-  let gameItems = [], currentItemIndex = 0, score = 0, userAnswers = [];
-
-  function showNextItem() {
-    if (currentItemIndex >= gameItems.length) {
-      endGame();
-      return;
-    }
-    const item = gameItems[currentItemIndex];
-    $('expense-description').textContent = item.description;
-    $('expense-amount').textContent = item.amount;
-    $('progress').style.width = (currentItemIndex / gameItems.length * 100) + '%';
-  }
-
-  function handleAnswer(chosen) {
-    const item = gameItems[currentItemIndex];
-    const correct = (chosen === item.category);
-    if (correct) score++;
-    userAnswers.push({
-      ...item,
-      userCategory: chosen,
-      isCorrect: correct
-    });
-    currentItemIndex++;
-    showNextItem();
-  }
-
-  function endGame() {
-    showScreen('screen-results');
-    $('final-score').textContent = score;
-    $('total-questions').textContent = gameItems.length;
-    $('score-message').textContent =
-      score === gameItems.length
-        ? 'Perfect! 🎉'
-        : 'Nice try!';
-    if (score === gameItems.length) {
-      createConfetti();
-      playSuccessSound();
-    }
-    // Build category distribution bars
-    const dist = {};
-    gameItems.forEach(i => {
-      dist[i.category] = (dist[i.category] || 0) + 1;
-    });
-    const cd = $('category-distribution');
-    cd.innerHTML = '';
-    Object.entries(dist).forEach(([cat, cnt]) => {
-      const pct = Math.round(cnt / gameItems.length * 100);
-      const bar = document.createElement('div');
-      bar.className = 'category-bar';
-      const fill = document.createElement('div');
-      fill.className = 'category-fill ' + cat;
-      fill.style.width = pct + '%';
-      const label = document.createElement('div');
-      label.className = 'category-label';
-      label.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-      const percent = document.createElement('div');
-      percent.className = 'category-percent';
-      percent.textContent = pct + '%';
-      bar.append(fill, label, percent);
-      cd.appendChild(bar);
-    });
-    // Show detailed feedback
-    const rd = $('results-details');
-    rd.innerHTML = '';
-    userAnswers.forEach(a => {
-      const box = document.createElement('div');
-      box.className = 'result-box ' + (a.isCorrect ? 'correct' : 'incorrect');
-      box.innerHTML = `
-        <strong>${a.description}</strong><br/>
-        You chose: <em>${a.userCategory}</em><br/>
-        Correct: <em>${a.category}</em><br/>
-        <small>${a.explanation}</small>
-      `;
-      rd.appendChild(box);
-    });
-  }
-
-  // —————————————————————————————————————————
-  // CELEBRATION EFFECTS
-  // —————————————————————————————————————————
-
-  function createConfetti() {
-    for (let i = 0; i < 80; i++) {
-      const c = document.createElement('div');
-      c.className = 'confetti';
-      c.style.left = Math.random()*100 + '%';
-      const colors = ['#3498db','#2ecc71','#e74c3c','#f39c12','#9b59b6','#1abc9c'];
-      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-      const size = Math.random()*8 + 5;
-      c.style.width = size + 'px';
-      c.style.height = size + 'px';
-      c.style.animation = `confetti-fall ${Math.random()*2+2}s ease-in-out forwards`;
-      document.body.appendChild(c);
-      setTimeout(()=> c.remove(), 5000);
-    }
-  }
-
-  function playSuccessSound() {
-    try {
-      const ctx = new (window.AudioContext||window.webkitAudioContext)();
-      const note = (f, t, d, v) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.value = f;
-        gain.gain.value = v;
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(t); osc.stop(t + d);
-      };
-      note(523.25, 0,   0.2, 0.5);
-      note(659.25, 0.2, 0.2, 0.5);
-      note(783.99, 0.4, 0.2, 0.5);
-    } catch(e) {
-      console.error('Sound error', e);
-    }
-  }
-
-  // —————————————————————————————————————————
-  // WIRE UP THE BUTTONS
-  // —————————————————————————————————————————
-
-  document.addEventListener('DOMContentLoaded', () => {
-    $('start-button').addEventListener('click', () => {
-      gameItems = selectRandomItems();
-      currentItemIndex = 0;
-      score = 0;
-      userAnswers = [];
-      showScreen('screen-game');
-      showNextItem();
-    });
-    $('how-to-play').addEventListener('click', () => showScreen('screen-how-to-play'));
-    $('back-to-start').addEventListener('click', () => showScreen('screen-start'));
-    $('play-again').addEventListener('click', () => showScreen('screen-start'));
-
-    document.querySelectorAll('#screen-game .category-button')
-      .forEach(btn => {
-        btn.addEventListener('click', () => handleAnswer(btn.dataset.category));
-      });
-
-    // Help toggle
-    $('show-help').addEventListener('click', () => {
-      const h = $('category-help');
-      h.style.display = (h.style.display === 'none') ? 'block' : 'none';
-    });
-  });
-  </script>
+    <script>
+        // Create pie chart for budget breakdown
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        const budgetChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Housing', 'Transportation', 'Food', 'Utilities', 'Entertainment', 'Debt', 'Health', 'Savings'],
+                datasets: [{
+                    data: [20, 18, 15, 10, 12, 10, 8, 7],
+                    backgroundColor: [
+                        '#3498db',  // Housing
+                        '#2ecc71',  // Transportation
+                        '#e74c3c',  // Food
+                        '#f39c12',  // Utilities
+                        '#9b59b6',  // Entertainment
+                        '#e67e22',  // Debt
+                        '#1abc9c',  // Health
+                        '#34495e'   // Savings
+                    ],
+                    borderColor: [
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff',
+                        '#ffffff'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 12
+                            },
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}% of budget`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
