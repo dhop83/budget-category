@@ -1,254 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Category Master</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-            background-color: #f5f5f5;
-            overflow-x: hidden;
-        }
-        .screen {
-            display: none;
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .active {
-            display: block;
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        h2 {
-            color: #3498db;
-        }
-        .button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #2980b9;
-        }
-        .expense-item {
-            background-color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px auto;
-            max-width: 500px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .expense-amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #16a085;
-        }
-        .category-options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .category-button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        .category-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .housing { background-color: #3498db; color: white; }
-        .transportation { background-color: #2ecc71; color: white; }
-        .food { background-color: #e74c3c; color: white; }
-        .utilities { background-color: #f39c12; color: white; }
-        .entertainment { background-color: #9b59b6; color: white; }
-        .health { background-color: #1abc9c; color: white; }
-        .debt { background-color: #e67e22; color: white; }
-        .savings { background-color: #34495e; color: white; }
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background-color: #3498db;
-            transition: width 0.5s;
-        }
-        .score-summary { font-size: 18px; margin: 20px 0; }
-        .result-box {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            text-align: left;
-        }
-        .correct {
-            background-color: #d5f5e3;
-            border-left: 5px solid #2ecc71;
-        }
-        .incorrect {
-            background-color: #fadbd8;
-            border-left: 5px solid #e74c3c;
-        }
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            animation: confetti-fall 3s ease-in-out forwards;
-            z-index: 999;
-        }
-        @keyframes confetti-fall {
-            0%   { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh)  rotate(720deg); opacity: 0; }
-        }
-        .perfect-score {
-            animation: pulse 1s infinite;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        @keyframes pulse {
-            0%   { transform: scale(1); }
-            50%  { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .category-help {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            text-align: left;
-        }
-        .help-toggle {
-            color: #3498db;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 10px;
-            display: inline-block;
-        }
-        .category-description {
-            margin-top: 10px;
-            font-style: italic;
-            color: #7f8c8d;
-        }
-        .tips-box {
-            background-color: #e8f4f8;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .category-summary {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            text-align: left;
-        }
-        .category-bar {
-            height: 24px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin: 10px 0;
-            overflow: hidden;
-            position: relative;
-        }
-        .category-fill {
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            transition: width 0.8s;
-        }
-        .category-label {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-weight: bold;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-            z-index: 1;
-        }
-        .category-percent {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: bold;
-        }
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 14px;
-            color: #7f8c8d;
-            border-top: 1px solid #e0e0e0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Budget Category Master</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #f5f5f5;
+      overflow-x: hidden;
+    }
+    .screen {
+      display: none;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    .active {
+      display: block;
+    }
+    h1 { color: #2c3e50; margin-bottom: 30px; }
+    h2 { color: #3498db; }
+    .button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s;
+    }
+    .button:hover { background-color: #2980b9; }
+    .expense-item {
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .expense-amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: #16a085;
+    }
+    .category-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .category-button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .category-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .housing { background-color: #3498db; color: white; }
+    .transportation { background-color: #2ecc71; color: white; }
+    .food { background-color: #e74c3c; color: white; }
+    .utilities { background-color: #f39c12; color: white; }
+    .entertainment { background-color: #9b59b6; color: white; }
+    .health { background-color: #1abc9c; color: white; }
+    .debt { background-color: #e67e22; color: white; }
+    .savings { background-color: #34495e; color: white; }
+    .progress-bar {
+      height: 10px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #3498db;
+      transition: width 0.5s;
+    }
+    .score-summary { font-size: 18px; margin: 20px 0; }
+    .confetti {
+      position: fixed;
+      animation: confetti-fall 3s ease-in-out forwards;
+      z-index: 999;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh)  rotate(720deg); opacity: 0; }
+    }
+    .perfect-score {
+      animation: pulse 1s infinite;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .category-help, .tips-box {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .help-toggle {
+      color: #3498db;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .category-description {
+      margin-top: 10px;
+      font-style: italic;
+      color: #7f8c8d;
+    }
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 14px;
+      color: #7f8c8d;
+      border-top: 1px solid #e0e0e0;
+    }
+  </style>
+  <script>
+    // All possible expense data and helper functions go here...
+    // (your full JS as before, up through createConfetti())
+
+    // Play celebration sound
+    function playSuccessSound() {
+      try {
+        const audioContext = new (window.AudioContext||window.webkitAudioContext)();
+        const playNote = (freq, start, dur, vol) => {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.value = vol;
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+          osc.start(start);
+          osc.stop(start + dur);
+        };
+        playNote(523.25, 0,   0.2, 0.5);
+        playNote(659.25, 0.2, 0.2, 0.5);
+        playNote(783.99, 0.4, 0.2, 0.5);
+      } catch(e) {
+        console.error("Sound error:", e);
+      }
+    }
+  </script>
 </head>
 <body>
-    <h1>Budget Category Master</h1>
-    
-    <!-- ... all your screens here ... -->
-    
-    <footer>
-        Copyright 2025 Dale Hopkinson. All Rights Reserved.
-    </footer>
-    
-    <script>
-        // ... up through createConfetti() as you had ...
+  <h1>Budget Category Master</h1>
 
-        // Play celebration sound
-        function playSuccessSound() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Create oscillator for "ta-da" sound
-                const playNote = (frequency, start, duration, volume) => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode   = audioContext.createGain();
-                    
-                    oscillator.type            = 'sine';
-                    oscillator.frequency.value = frequency;
-                    gainNode.gain.value        = volume;
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.start(start);
-                    oscillator.stop(start + duration);
-                };
+  <!-- Start Screen (now active!) -->
+  <div id="screen-start" class="screen active">
+    <h2>Learn to Master Budget Categories!</h2>
+    <p>Test your knowledge about categorizing expenses properly in a budget.</p>
+    <button id="start-button" class="button">Start Game</button>
+    <button id="how-to-play" class="button">How to Play</button>
+    <div class="tips-box">
+      <h3>Why Budget Categories Matter</h3>
+      <ul>
+        <li>Identify spending patterns</li>
+        <li>Find areas to cut back</li>
+        <li>Make informed financial decisions</li>
+        <li>Plan for future expenses</li>
+      </ul>
+    </div>
+  </div>
 
-                // A simple "ta-da" melody
-                playNote(523.25, 0,   0.2, 0.5);
-                playNote(659.25, 0.2, 0.2, 0.5);
-                playNote(783.99, 0.4, 0.2, 0.5);
-            } catch (error) {
-                console.error("Playback failed:", error);
-            }
-        }
-    </script>
+  <!-- How to Play Screen -->
+  <div id="screen-how-to-play" class="screen">
+    <h2>How to Play</h2>
+    <p>You'll be shown different expenses one at a time.</p>
+    <p>For each expense, decide which budget category it belongs in:</p>
+    <div class="category-help">
+      <div><span class="category-button housing">Housing</span> <span class="category-description">Rent, mortgage, repairs…</span></div>
+      <div><span class="category-button transportation">Transportation</span> <span class="category-description">Car, gas, transit…</span></div>
+      <div><span class="category-button food">Food</span> <span class="category-description">Groceries, dining out…</span></div>
+      <div><span class="category-button utilities">Utilities</span> <span class="category-description">Electric, water, internet…</span></div>
+      <div><span class="category-button entertainment">Entertainment</span> <span class="category-description">Movies, hobbies…</span></div>
+      <div><span class="category-button health">Health</span> <span class="category-description">Doctor visits, meds…</span></div>
+      <div><span class="category-button debt">Debt Payment</span> <span class="category-description">Loans, credit cards…</span></div>
+      <div><span class="category-button savings">Savings</span> <span class="category-description">Emergency fund, retirement…</span></div>
+    </div>
+    <button id="back-to-start" class="button">Back to Start</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="progress-bar"><div id="progress" class="progress" style="width:0%"></div></div>
+    <h2>Categorize This Expense:</h2>
+    <div class="expense-item">
+      <div id="expense-description"></div>
+      <div class="expense-amount">$<span id="expense-amount"></span></div>
+    </div>
+    <div class="category-options">
+      <button class="category-button housing" data-category="housing">Housing</button>
+      <button class="category-button transportation" data-category="transportation">Transportation</button>
+      <button class="category-button food" data-category="food">Food</button>
+      <button class="category-button utilities" data-category="utilities">Utilities</button>
+      <button class="category-button entertainment" data-category="entertainment">Entertainment</button>
+      <button class="category-button health" data-category="health">Health</button>
+      <button class="category-button debt" data-category="debt">Debt</button>
+      <button class="category-button savings" data-category="savings">Savings</button>
+    </div>
+    <div id="show-help" class="help-toggle">Need help with categories?</div>
+    <div id="category-help" class="category-help" style="display:none;">
+      <!-- same list as above -->
+    </div>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="screen-results" class="screen">
+    <h2>Your Results</h2>
+    <div class="score-summary">
+      <p>You scored: <span id="final-score"></span>/<span id="total-questions">15</span></p>
+      <p id="score-message"></p>
+    </div>
+    <div class="category-summary">
+      <h3>Your Budget Breakdown</h3>
+      <div id="category-distribution"></div>
+    </div>
+    <div class="tips-box">
+      <h3>Budgeting Tips</h3>
+      <ul>
+        <li>Use the 50/30/20 rule</li>
+        <li>Review monthly to catch overspending</li>
+        <li>Include irregular expenses</li>
+        <li>Try a budgeting app</li>
+      </ul>
+    </div>
+    <div id="results-details"></div>
+    <button id="play-again" class="button">Play Again</button>
+  </div>
+
+  <footer>
+    Copyright 2025 Dale Hopkinson. All Rights Reserved.
+  </footer>
 </body>
 </html>
